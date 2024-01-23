@@ -136,6 +136,10 @@
 
 ** GENERAL KEYBINDINGS
 #+begin_src emacs-lisp
+;; Keybindings not using leader key
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+;; Keybindings using leader key
 (use-package general
   :diminish
   :config
