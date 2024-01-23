@@ -24,10 +24,14 @@
   - [[#enabling-org-bullets][Enabling Org Bullets]]
   - [[#disable-electric-indent][Disable Electric Indent]]
   - [[#source-code-block-tag-expansion][Source Code Block Tag Expansion]]
+- [[#rainbow-mode][RAINBOW MODE]]
 - [[#sudo-edit][SUDO EDIT]]
+- [[#theme][THEME]]
 - [[#which-key][WHICH-KEY]]
 - [[#reload-emacs][RELOAD EMACS]]
-- [[#terminals][TERMINALS]]
+- [[#shells-and-terminals][SHELLS AND TERMINALS]]
+  - [[#eshell][Eshell]]
+  - [[#vterm][VTERM]]
 
 * IMPORTANT PROGRAMS TO LOAD FIRST
 ** ELPACA PACKAGE MANAGER
@@ -166,7 +170,6 @@
       "h" '(:ignore t :wk "Help")
       "h f" '(describe-function :wk "Describe function")
       "h v" '(describe-variable :wk "Describe variable")
-      ;;"h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
       "h r r" '(reload-init-file :wk "Reload emacs config"))
 
     (jay/leader-keys
@@ -455,6 +458,15 @@ Org-tempo is not a separate package but a module within org that can be enabled.
 (require 'org-tempo)
 #+end_src
 
+* RAINBOW MODE
+Display the actual color as a background for any hex color value (ex. #ffffff).  The code block below enables rainbow-mode in all programming modes (prog-mode) as well as org-mode, which is why rainbow works in this document.  
+
+#+begin_src emacs-lisp
+(use-package rainbow-mode
+  :hook 
+  ((org-mode prog-mode) . rainbow-mode))
+#+end_src
+
 * SUDO EDIT
 [[https://github.com/nflath/sudo-edit][sudo-edit]] gives us the ability to open files with sudo privileges or switch over to editing with sudo privileges if we initially opened the file without such privileges.
 
@@ -466,6 +478,14 @@ Org-tempo is not a separate package but a module within org that can be enabled.
       "fU" '(sudo-edit :wk "Sudo edit file")))
 #+end_src
 
+* THEME
+The first of the two lines below designates the directory where will place all of our themes.  The second line loads our chosen theme which is *dtmacs*, a theme that I created with the help of the [[https://emacsfodder.github.io/emacs-theme-editor/][Emacs Theme Editor]].
+
+#+begin_src emacs-lisp
+(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
+(load-theme 'dtmacs t)
+#+end_src
+
 * WHICH-KEY
 #+begin_src emacs-lisp
   (use-package which-key
@@ -473,17 +493,17 @@ Org-tempo is not a separate package but a module within org that can be enabled.
       (which-key-mode 1)
     :config
     (setq which-key-side-window-location 'bottom
-	  which-key-sort-order #'which-key-key-order-alpha
-	  which-key-sort-uppercase-first nil
-	  which-key-add-column-padding 1
-	  which-key-max-display-columns nil
-	  which-key-min-display-lines 6
-	  which-key-side-window-slot -10
-	  which-key-side-window-max-height 0.25
-	  which-key-idle-delay 0.8
-	  which-key-max-description-length 25
-	  which-key-allow-imprecise-window-fit t
-	  which-key-separator " → " ))
+          which-key-sort-order #'which-key-key-order
+          which-key-sort-uppercase-first nil
+          which-key-add-column-padding 1
+          which-key-max-display-columns 3
+          which-key-min-display-lines 8
+          which-key-side-window-slot -10
+          which-key-side-window-max-height 0.25
+          which-key-idle-delay 0.8
+          which-key-max-description-length 25
+          which-key-allow-imprecise-window-fit t
+          which-key-separator " → " ))
 #+end_src
 
 * RELOAD EMACS
@@ -495,12 +515,34 @@ This is just an example of how to create a simple function in Emacs.  Use this f
   (load-file user-init-file)
   (load-file user-init-file))
 #+end_src
+* SHELLS AND TERMINALS
+In my configs, all of my shells (bash, fish, zsh and the ESHELL) require my shell-color-scripts-git package to be installed.  On Arch Linux, you can install it from the AUR.  Otherwise, go to my shell-color-scripts repository on GitLab to get it.
 
-* TERMINALS
+** Eshell
+Eshell is an Emacs 'shell' that is written in Elisp.
+
 #+begin_src emacs-lisp
-  (use-package vterm
-      :ensure t
+    (use-package eshell-syntax-highlighting
+      :after esh-mode
       :config
-      (setq shell-file-name "/bin/zsh"))
-#+end_src
+      (eshell-syntax-highlighting-global-mode +1))
 
+    ;; eshell-syntax-highlighting -- adds fish/zsh-like syntax highlighting.
+    ;; eshell-rc-script -- your profile for eshell; like a bashrc for eshell.
+    ;; eshell-aliases-file -- sets an aliases file for the eshell.
+
+    (setq eshell-rc-script (concat user-emacs-directory "eshell/profile")
+          eshell-aliases-file (concat user-emacs-directory "eshell/aliases")
+          eshell-history-size 5000
+          eshell-buffer-maximum-lines 5000
+          eshell-hist-ignoredups t
+          eshell-scroll-to-bottom-on-input t
+          eshell-destroy-buffer-when-process-dies t
+          eshell-visual-commands'("bash" "fish" "htop" "ssh" "top" "zsh"))
+** VTERM
+    (use-package vterm
+        :ensure t
+        :config
+        (setq shell-file-name "/bin/zsh"))
+
+#+end_src
