@@ -11,6 +11,9 @@
   - [[#general-keybindings][GENERAL KEYBINDINGS]]
 - [[#all-the-icons][ALL THE ICONS]]
 - [[#buffer-move][BUFFER-MOVE]]
+- [[#company][COMPANY]]
+- [[#diminish][DIMINISH]]
+- [[#flycheck][FLYCHECK]]
 - [[#fonts][FONTS]]
   - [[#zooming-inout][Zooming In/Out]]
 - [[#graphical-user-interface-tweaks][GRAPHICAL USER INTERFACE TWEAKS]]
@@ -106,6 +109,7 @@
 #+begin_src emacs-lisp
 ;; Expands to: (elpaca evil (use-package evil :demand t))
 (use-package evil
+  :diminish
   :init				;; tweak evil's configuration before loading it
   (setq evil-want-integration t)	;; This is optional since it's already set to t by default.
   (setq evil-want-keybinding nil)
@@ -130,72 +134,74 @@
 
 ** GENERAL KEYBINDINGS
 #+begin_src emacs-lisp
-    (use-package general
-      :config
-      (general-evil-setup)
+(use-package general
+  :diminish
+  :config
+  (general-evil-setup)
 
-    ;; set up 'SPC' as the global leader key
-    (general-create-definer jay/leader-keys
-      :states '(normal insert visual emacs)
-      :keymaps 'override
-      :prefix "SPC" ;; set leader
-      :global-prefix "M-SPC") ;; access leader in insert mode
+;; set up 'SPC' as the global leader key
+(general-create-definer jay/leader-keys
+  :states '(normal insert visual emacs)
+  :keymaps 'override
+  :prefix "SPC" ;; set leader
+  :global-prefix "M-SPC") ;; access leader in insert mode
 
-    (jay/leader-keys
-      "." '(find-file :wk "Find file")
-      "r" '(ranger :wk "Navigate files with ranger")
-      "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
-      "f r" '(counsel-recentf :wk "Find recent files")
-      "f s" '(save-buffer :wk "File save")
-      "TAB TAB" '(comment-line :wk "Comment lines"))
+(jay/leader-keys
+  "SPC" '(counsel-M-x :wk "Counsel M-x")
+  "." '(find-file :wk "Find file")
+  "r" '(ranger :wk "Navigate files with ranger")
+  "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
+  "f r" '(counsel-recentf :wk "Find recent files")
+  "f s" '(save-buffer :wk "File save")
+  "TAB TAB" '(comment-line :wk "Comment lines"))
 
-    (jay/leader-keys
-      "b" '(:ignore t :wk "buffer")
-      "bb" '(switch-to-buffer :wk "Switch buffer")
-      "bi" '(ibuffer :wk "Switch to iBuffer")
-      "bk" '(kill-this-buffer :wk "Kill this buffer")
-      "bn" '(next-buffer :wk "Next buffer")
-      "bp" '(previous-buffer :wk "Previous buffer")
-      "br" '(revert-buffer :wk "Reload buffer"))
+(jay/leader-keys
+  "b" '(:ignore t :wk "buffer")
+  "bb" '(switch-to-buffer :wk "Switch buffer")
+  "bi" '(ibuffer :wk "Switch to iBuffer")
+  "bk" '(kill-this-buffer :wk "Kill this buffer")
+  "bn" '(next-buffer :wk "Next buffer")
+  "bp" '(previous-buffer :wk "Previous buffer")
+  "br" '(revert-buffer :wk "Reload buffer"))
 
-    (jay/leader-keys
-      "e" '(:ignore t :wk "Evaluate")    
-      "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
-      "e d" '(eval-defun :wk "Evaluate defun containing or after point")
-      "e e" '(eval-expression :wk "Evaluate and elisp expression")
-      "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
-      "e r" '(eval-region :wk "Evaluate elisp in region")) 
+(jay/leader-keys
+  "e" '(:ignore t :wk "Evaluate")    
+  "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+  "e d" '(eval-defun :wk "Evaluate defun containing or after point")
+  "e e" '(eval-expression :wk "Evaluate and elisp expression")
+  "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
+  "e r" '(eval-region :wk "Evaluate elisp in region")) 
 
-    (jay/leader-keys
-      "h" '(:ignore t :wk "Help")
-      "h f" '(describe-function :wk "Describe function")
-      "h v" '(describe-variable :wk "Describe variable")
-      "h r r" '(reload-init-file :wk "Reload emacs config"))
+(jay/leader-keys
+  "h" '(:ignore t :wk "Help")
+  "h f" '(describe-function :wk "Describe function")
+  "h v" '(describe-variable :wk "Describe variable")
+  "h r r" '(reload-init-file :wk "Reload emacs config"))
 
-    (jay/leader-keys
-      "t" '(:ignore t :wk "Toggle")
-      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
-      "t t" '(visual-line-mode :wk "Toggle truncated lines"))
+(jay/leader-keys
+  "t" '(:ignore t :wk "Toggle")
+  "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
+  "t t" '(visual-line-mode :wk "Toggle truncated lines"))
 
-    (jay/leader-keys
-      "w" '(:ignore t :wk "Windows")
-      ;; Window splits
-      "w q" '(evil-window-delete :wk "Close window")
-      "w n" '(evil-window-new :wk "New window")
-      "w s" '(evil-window-split :wk "Horizontal split window")
-      "w v" '(evil-window-vsplit :wk "Vertical split window")
-      ;; Window motions
-      "w h" '(evil-window-left :wk "Window left")
-      "w j" '(evil-window-down :wk "Window down")
-      "w k" '(evil-window-up :wk "Window up")
-      "w l" '(evil-window-right :wk "Window right")
-      "w w" '(evil-window-next :wk "Goto next window")
-      ;; Move Windows
-      "w H" '(buf-move-left :wk "Buffer move left")
-      "w J" '(buf-move-down :wk "Buffer move down")
-      "w K" '(buf-move-up :wk "Buffer move up")
-      "w L" '(buf-move-right :wk "Buffer move right"))
-    )
+(jay/leader-keys
+  "w" '(:ignore t :wk "Windows")
+  ;; Window splits
+  "w q" '(evil-window-delete :wk "Close window")
+  "w n" '(evil-window-new :wk "New window")
+  "w s" '(evil-window-split :wk "Horizontal split window")
+  "w v" '(evil-window-vsplit :wk "Vertical split window")
+  ;; Window motions
+  "w h" '(evil-window-left :wk "Window left")
+  "w j" '(evil-window-down :wk "Window down")
+  "w k" '(evil-window-up :wk "Window up")
+  "w l" '(evil-window-right :wk "Window right")
+  "w w" '(evil-window-next :wk "Goto next window")
+  ;; Move Windows
+  "w H" '(buf-move-left :wk "Buffer move left")
+  "w J" '(buf-move-down :wk "Buffer move down")
+  "w K" '(buf-move-up :wk "Buffer move up")
+  "w L" '(buf-move-right :wk "Buffer move right"))
+)
 
 #+end_src
 
@@ -286,6 +292,45 @@ one, an error is signaled."
       (select-window other-win))))
 #+end_src
 
+* COMPANY
+[[https://company-mode.github.io/][Company]] is a text completion framework for Emacs. The name stands for "complete anything".  Completion will start automatically after you type a few letters. Use M-n and M-p to select, <return> to complete or <tab> to complete the common part.
+
+#+begin_src emacs-lisp
+(use-package company
+  :defer 2
+  :diminish
+  :custom
+  (company-begin-commands '(self-insert-command))
+  (company-idle-delay .1)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t))
+
+(use-package company-box
+  :after company
+  :diminish
+  :hook (company-mode . company-box-mode))
+#+end_src
+
+* DIMINISH
+This package implements hiding or abbreviation of the modeline displays (lighters) of minor-modes.  With this package installed, you can add ':diminish' to any use-package block to hide that particular mode in the modeline.
+
+#+begin_src emacs-lisp
+(use-package diminish)
+#+end_src
+
+* FLYCHECK
+Install =luacheck= from your Linux distro's repositories for flycheck to work correctly with lua files.  Install =python-pylint= for flycheck to work with python files.  Haskell works with flycheck as long as =haskell-ghc= or =haskell-stack-ghc= is installed.  For more information on language support for flycheck, [[https://www.flycheck.org/en/latest/languages.html][read this]].
+
+#+begin_src emacs-lisp
+(use-package flycheck
+  :ensure t
+  :defer t
+  :diminish
+  :init (global-flycheck-mode))
+#+end_src
+
 * FONTS
 #+begin_src emacs-lisp
   ;; Defining the various fonts that Emacs will use.
@@ -347,30 +392,32 @@ Let's make GNU Emacs look a little better.
 
 ** Ranger as Default File Navigator
 #+begin_src emacs-lisp
-  (use-package ranger
-    :config
-    (setq ranger-preview-file t)
-    (setq ranger-width-preview 0.40)
-    (setq ranger-parent-depth 1)
-    (setq ranger-width-parents 0.20))
+(use-package ranger
+  :diminish
+  :config
+  (setq ranger-preview-file t)
+  (setq ranger-width-preview 0.40)
+  (setq ranger-parent-depth 1)
+  (setq ranger-width-parents 0.20))
 #+end_src
 
 ** Fuzzy Find Search
 #+begin_src emacs-lisp
-  ;; add fzf to emacs exec-path
-  (add-to-list 'exec-path "/usr/local/bin")
-  (use-package fzf 
-    :config
-    (setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
-       fzf/executable "fzf"
-       fzf/git-grep-args "-i --line-number %s"
-       ;; command used for `fzf-grep-*` functions
-       ;; example usage for ripgrep:
-       ;; fzf/grep-command "rg --no-heading -nH"
-       fzf/grep-command "grep -nrH"
-       ;; If nil, the fzf buffer will appear at the top of the window
-       fzf/position-bottom t
-       fzf/window-height 15))
+;; add fzf to emacs exec-path
+(add-to-list 'exec-path "/usr/local/bin")
+(use-package fzf 
+  :diminish
+  :config
+  (setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
+     fzf/executable "fzf"
+     fzf/git-grep-args "-i --line-number %s"
+     ;; command used for `fzf-grep-*` functions
+     ;; example usage for ripgrep:
+     ;; fzf/grep-command "rg --no-heading -nH"
+     fzf/grep-command "grep -nrH"
+     ;; If nil, the fzf buffer will appear at the top of the window
+     fzf/position-bottom t
+     fzf/window-height 15))
 #+end_src
 
 * IVY (COUNSEL)
@@ -379,37 +426,40 @@ Let's make GNU Emacs look a little better.
 + Ivy-rich allows us to add descriptions alongside the commands in M-x.
 
 #+begin_src emacs-lisp
-  (use-package counsel
-    :after ivy
-    :config (counsel-mode))
-  
-  (use-package ivy
-    :bind
-    ;; ivy-resume resumes the last Ivy-based completion.
-    (("C-c C-r" . ivy-resume)
-     ("C-x B" . ivy-switch-buffer-other-window))
-    :custom
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-count-format "(%d/%d) ")
-    (setq enable-recursive-minibuffers t)
-    :config
-    (ivy-mode))
+(use-package counsel
+  :after ivy
+  :diminish
+  :config (counsel-mode))
 
-  (use-package all-the-icons-ivy-rich
-    :ensure t
-    :init (all-the-icons-ivy-rich-mode 1))
+(use-package ivy
+  :diminish
+  :bind
+  ;; ivy-resume resumes the last Ivy-based completion.
+  (("C-c C-r" . ivy-resume)
+   ("C-x B" . ivy-switch-buffer-other-window))
+  :custom
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-count-format "(%d/%d) ")
+  (setq enable-recursive-minibuffers t)
+  :config
+  (ivy-mode))
 
-  (use-package ivy-rich
-    :after ivy
-    :ensure t
-    :init (ivy-rich-mode 1) ;; this gets us descriptions in M-x.
-    :custom
-    (ivy-virtual-abbreviate 'full
-     ivy-rich-switch-buffer-align-virtual-buffer t
-     ivy-rich-path-style 'abbrev)
-    :config
-    (ivy-set-display-transformer 'ivy-switch-buffer
-                                 'ivy-rich-switch-buffer-transformer))
+(use-package all-the-icons-ivy-rich
+  :ensure t
+  :init (all-the-icons-ivy-rich-mode 1))
+
+(use-package ivy-rich
+  :diminish
+  :after ivy
+  :ensure t
+  :init (ivy-rich-mode 1) ;; this gets us descriptions in M-x.
+  :custom
+  (ivy-virtual-abbreviate 'full
+   ivy-rich-switch-buffer-align-virtual-buffer t
+   ivy-rich-path-style 'abbrev)
+  :config
+  (ivy-set-display-transformer 'ivy-switch-buffer
+                               'ivy-rich-switch-buffer-transformer))
 
 #+end_src
 
@@ -425,9 +475,9 @@ Let's make GNU Emacs look a little better.
 Org-bullets gives us attractive bullets rather than asterisks.
 
 #+begin_src emacs-lisp
-  (add-hook 'org-mode-hook 'org-indent-mode)
-  (use-package org-bullets)
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(add-hook 'org-mode-hook 'org-indent-mode)
+(use-package org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 #+end_src
 
 ** Disable Electric Indent
@@ -435,6 +485,7 @@ Org mode source blocks have some really weird and annoying default indentation b
 
 #+begin_src emacs-lisp
 (electric-indent-mode -1)
+(setq org-edit-src-content-indentation 0)
 #+end_src
 
 #+RESULTS:
@@ -463,6 +514,7 @@ Display the actual color as a background for any hex color value (ex. #ffffff). 
 
 #+begin_src emacs-lisp
 (use-package rainbow-mode
+  :diminish
   :hook 
   ((org-mode prog-mode) . rainbow-mode))
 #+end_src
@@ -488,22 +540,23 @@ The first of the two lines below designates the directory where will place all o
 
 * WHICH-KEY
 #+begin_src emacs-lisp
-  (use-package which-key
-    :init
-      (which-key-mode 1)
-    :config
-    (setq which-key-side-window-location 'bottom
-          which-key-sort-order #'which-key-key-order
-          which-key-sort-uppercase-first nil
-          which-key-add-column-padding 1
-          which-key-max-display-columns 3
-          which-key-min-display-lines 8
-          which-key-side-window-slot -10
-          which-key-side-window-max-height 0.25
-          which-key-idle-delay 0.8
-          which-key-max-description-length 25
-          which-key-allow-imprecise-window-fit t
-          which-key-separator " → " ))
+(use-package which-key
+  :diminish
+  :init
+    (which-key-mode 1)
+  :config
+  (setq which-key-side-window-location 'bottom
+        which-key-sort-order #'which-key-key-order
+        which-key-sort-uppercase-first nil
+        which-key-add-column-padding 1
+        which-key-max-display-columns 3
+        which-key-min-display-lines 8
+        which-key-side-window-slot -10
+        which-key-side-window-max-height 0.25
+        which-key-idle-delay 0.8
+        which-key-max-description-length 25
+        which-key-allow-imprecise-window-fit t
+        which-key-separator " → " ))
 #+end_src
 
 * RELOAD EMACS
