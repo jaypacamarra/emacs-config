@@ -21,6 +21,7 @@
   - [[#display-line-numbers-and-truncated-lines][Display Line Numbers and Truncated Lines]]
   - [[#ranger-as-default-file-navigator][Ranger as Default File Navigator]]
   - [[#fuzzy-find-search][Fuzzy Find Search]]
+- [[#magit][MAGIT]]
 - [[#ivy-counsel][IVY (COUNSEL)]]
 - [[#org-mode][ORG MODE]]
   - [[#enabling-table-of-contents][Enabling Table of Contents]]
@@ -119,7 +120,7 @@
 (use-package evil-collection
   :after evil
   :config
-  (setq evil-collection-mode-list '(dashboard dired ibuffer))
+  (setq evil-collection-mode-list '(dashboard dired ibuffer magit help))
   (evil-collection-init))
 (use-package evil-tutor)
 
@@ -141,7 +142,8 @@
 
 ;; set up 'SPC' as the global leader key
 (general-create-definer jay/leader-keys
-  :states '(normal insert visual emacs)
+  ;;:states '(normal insert visual emacs help)
+  :states '(prog-mode) ;;leader key to work in all modes (not sure if it works)
   :keymaps 'override
   :prefix "SPC" ;; set leader
   :global-prefix "M-SPC") ;; access leader in insert mode
@@ -420,10 +422,17 @@ Let's make GNU Emacs look a little better.
      fzf/window-height 15))
 #+end_src
 
+* MAGIT
+A git manager for the emacs user
+
+#+begin_src emacs-lisp
+(use-package magit)
+#+end_src
+
 * IVY (COUNSEL)
-+ Ivy, a generic completion mechanism for Emacs.
-+ Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
-+ Ivy-rich allows us to add descriptions alongside the commands in M-x.
+Ivy, a generic completion mechanism for Emacs.
+Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
+Ivy-rich allows us to add descriptions alongside the commands in M-x.
 
 #+begin_src emacs-lisp
 (use-package counsel
