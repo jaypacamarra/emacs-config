@@ -11,6 +11,7 @@
   - [[#general-keybindings][GENERAL KEYBINDINGS]]
 - [[#all-the-icons][ALL THE ICONS]]
 - [[#buffer-move][BUFFER-MOVE]]
+- [[#countel-tramp][COUNTEL-TRAMP]]
 - [[#company][COMPANY]]
 - [[#diminish][DIMINISH]]
 - [[#flycheck][FLYCHECK]]
@@ -292,6 +293,11 @@ one, an error is signaled."
       ;; move this one to top
       (set-window-buffer other-win buf-this-buf)
       (select-window other-win))))
+#+end_src
+
+* COUNTEL-TRAMP
+#+begin_src emacs-lisp
+(use-package counsel-tramp)
 #+end_src
 
 * COMPANY
@@ -606,5 +612,4 @@ Eshell is an Emacs 'shell' that is written in Elisp.
         :ensure t
         :config
         (setq shell-file-name "/bin/zsh"))
-
 #+end_src
