@@ -22,6 +22,7 @@
   - [[#display-line-numbers-and-truncated-lines][Display Line Numbers and Truncated Lines]]
   - [[#ranger-as-default-file-navigator][Ranger as Default File Navigator]]
   - [[#fuzzy-find-search][Fuzzy Find Search]]
+- [[#language-server-protocol-lsp][Language Server Protocol (LSP)]]
 - [[#magit][MAGIT]]
 - [[#ivy-counsel][IVY (COUNSEL)]]
 - [[#org-mode][ORG MODE]]
@@ -37,6 +38,7 @@
 - [[#shells-and-terminals][SHELLS AND TERMINALS]]
   - [[#eshell][Eshell]]
   - [[#vterm][VTERM]]
+- [[#tree-sitter][TREE SITTER]]
 
 * IMPORTANT PROGRAMS TO LOAD FIRST
 ** ELPACA PACKAGE MANAGER
@@ -434,6 +436,26 @@ Let's make GNU Emacs look a little better.
      fzf/window-height 15))
 #+end_src
 
+* Language Server Protocol (LSP)
+#+begin_src emacs-lisp
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (c-mode . lsp)
+         (c-ts-mode . lsp)
+         (c-or-c++-ts-mode . lsp)
+         (python . lsp)
+         (make . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+;; if you are ivy user
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+#+end_src
+
 * MAGIT
 A git manager for the emacs user
 
@@ -556,7 +578,8 @@ The first of the two lines below designates the directory where will place all o
 
 #+begin_src emacs-lisp
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
-(load-theme 'dtmacs t)
+;;(load-theme 'dtmacs t)
+(load-theme 'timu-caribbean t)
 #+end_src
 
 * WHICH-KEY
@@ -619,3 +642,18 @@ Eshell is an Emacs 'shell' that is written in Elisp.
         :config
         (setq shell-file-name "/bin/zsh"))
 #+end_src
+
+* TREE SITTER
+;; tree sitter package
+#+begin_src emacs-lisp
+(use-package tree-sitter)
+#+end_src
+
+;; tree sitter from emacs build
+;;#+begin_src emacs-lisp
+;;(global-font-lock-mode t)
+;;(setq font-lock-maximum-decoration 3)
+;;(setq treesit-extra-load-path '(~/.config/emacs/tree-sitter))
+;;(setq treesit-language-source-alist
+;;   '((c "https://github.com/tree-sitter/tree-sitter-c.git")))
+;;#+end_src
