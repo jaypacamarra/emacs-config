@@ -1,0 +1,62 @@
+diff --git a/config.org b/config.org
+index 13974d4..193734a 100644
+--- a/config.org
++++ b/config.org
+@@ -24,7 +24,9 @@
+   - [[#fuzzy-find-search][Fuzzy Find Search]]
+   - [[#modeline][MODELINE]]
+ - [[#language-server-protocol-lsp][Language Server Protocol (LSP)]]
+-- [[#magit][MAGIT]]
++- [[#git][GIT]]
++  - [[#magit][MAGIT]]
++  - [[#git-time-machine][GIT TIME MACHINE]]
+ - [[#ivy-counsel][IVY (COUNSEL)]]
+ - [[#org-mode][ORG MODE]]
+   - [[#enabling-table-of-contents][Enabling Table of Contents]]
+@@ -115,6 +117,7 @@
+ ;; Expands to: (elpaca evil (use-package evil :demand t))
+ (use-package evil
+   :diminish
++  :bind ("C-z" . evil-mode)
+   :init				;; tweak evil's configuration before loading it
+   (setq evil-want-integration t)	;; This is optional since it's already set to t by default.
+   (setq evil-want-keybinding nil)
+@@ -165,6 +168,7 @@
+ (jay/leader-keys
+   "b" '(:ignore t :wk "buffer")
+   "bb" '(switch-to-buffer :wk "Switch buffer")
++  "be" '(evil-mode :wk "Buffer toggle evil mode")
+   "bi" '(ibuffer  :wk "Switch to iBuffer")
+   "bk" '(kill-this-buffer :wk "Kill this buffer")
+   "bn" '(next-buffer :wk "Next buffer")
+@@ -180,7 +184,8 @@
+   "e r" '(eval-region :wk "Evaluate elisp in region")) 
+ 
+ (jay/leader-keys
+-  "g" '(:ignore t :wk "Git Magity")
++  "g" '(:ignore t :wk "Git")
++  "g m" '(git-timemachine-toggle :wk "Git timemachine")
+   "g g" '(magit-status :wk "Magit"))
+ 
+ (jay/leader-keys
+@@ -470,13 +475,18 @@ Let's make GNU Emacs look a little better.
+ (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+ #+end_src
+ 
+-* MAGIT
++* GIT
++** MAGIT
+ A git manager for the emacs user
+-
+ #+begin_src emacs-lisp
+ (use-package magit)
+ #+end_src
+ 
++** GIT TIME MACHINE
++#+begin_src emacs-lisp
++(use-package git-timemachine)
++#+end_src
++
+ * IVY (COUNSEL)
+ Ivy, a generic completion mechanism for Emacs.
+ Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
