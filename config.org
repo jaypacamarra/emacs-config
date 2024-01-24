@@ -338,7 +338,17 @@ one, an error is signaled."
 This package implements hiding or abbreviation of the modeline displays (lighters) of minor-modes.  With this package installed, you can add ':diminish' to any use-package block to hide that particular mode in the modeline.
 
 #+begin_src emacs-lisp
-(use-package diminish)
+(use-package diminish
+ :diminish abbrev-mode
+ :diminish org-indent-mode
+ :diminish apheleia-mode
+ :diminish auto-revert-mode
+ :diminish hungry-delete-mode
+ :diminish hungry-delete
+ :diminish lisp-interaction-mode
+ :diminish visual-line-mode
+ :diminish subword-mode
+ :diminish auto-fill-function)
 #+end_src
 
 * FLYCHECK
@@ -475,6 +485,7 @@ Ivy-rich allows us to add descriptions alongside the commands in M-x.
 #+begin_src emacs-lisp
 (use-package counsel
   :after ivy
+  :diminish
   :config (counsel-mode))
 
 (use-package ivy
