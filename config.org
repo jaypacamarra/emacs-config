@@ -164,7 +164,7 @@
 (jay/leader-keys
   "b" '(:ignore t :wk "buffer")
   "bb" '(switch-to-buffer :wk "Switch buffer")
-  "bi" '(ibuffer :wk "Switch to iBuffer")
+  "bi" '(ibuffer  :wk "Switch to iBuffer")
   "bk" '(kill-this-buffer :wk "Kill this buffer")
   "bn" '(next-buffer :wk "Next buffer")
   "bp" '(previous-buffer :wk "Previous buffer")
@@ -312,21 +312,21 @@ one, an error is signaled."
 [[https://company-mode.github.io/][Company]] is a text completion framework for Emacs. The name stands for "complete anything".  Completion will start automatically after you type a few letters. Use M-n and M-p to select, <return> to complete or <tab> to complete the common part.
 
 #+begin_src emacs-lisp
-(use-package company
-  :defer 2
-  :diminish
-  :custom
-  (company-begin-commands '(self-insert-command))
-  (company-idle-delay .1)
-  (company-minimum-prefix-length 2)
-  (company-show-numbers t)
-  (company-tooltip-align-annotations 't)
-  (global-company-mode t))
-
-(use-package company-box
-  :after company
-  :diminish
-  :hook (company-mode . company-box-mode))
+;;(use-package company
+;;  :defer 2
+;;  :diminish
+;;  :custom
+;;  (company-begin-commands '(self-insert-command))
+;;  (company-idle-delay .1)
+;;  (company-minimum-prefix-length 2)
+;;  (company-show-numbers t)
+;;  (company-tooltip-align-annotations 't)
+;;  (global-company-mode t))
+;;
+;;(use-package company-box
+;;  :after company
+;;  :diminish
+;;  :hook (company-mode . company-box-mode))
 #+end_src
 
 * DIMINISH
@@ -403,7 +403,6 @@ Let's make GNU Emacs look a little better.
 ** Display Line Numbers and Truncated Lines
 #+begin_src emacs-lisp
 (global-display-line-numbers-mode 1)
-(global-visual-line-mode nil)
 #+end_src
 
 ** Ranger as Default File Navigator
@@ -421,19 +420,7 @@ Let's make GNU Emacs look a little better.
 #+begin_src emacs-lisp
 ;; add fzf to emacs exec-path
 (add-to-list 'exec-path "/usr/local/bin")
-(use-package fzf 
-  :diminish
-  :config
-  (setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
-     fzf/executable "fzf"
-     fzf/git-grep-args "-i --line-number %s"
-     ;; command used for `fzf-grep-*` functions
-     ;; example usage for ripgrep:
-     ;; fzf/grep-command "rg --no-heading -nH"
-     fzf/grep-command "grep -nrH"
-     ;; If nil, the fzf buffer will appear at the top of the window
-     fzf/position-bottom t
-     fzf/window-height 15))
+(use-package fzf)
 #+end_src
 
 * Language Server Protocol (LSP)
@@ -471,15 +458,10 @@ Ivy-rich allows us to add descriptions alongside the commands in M-x.
 #+begin_src emacs-lisp
 (use-package counsel
   :after ivy
-  :diminish
   :config (counsel-mode))
 
 (use-package ivy
   :diminish
-  :bind
-  ;; ivy-resume resumes the last Ivy-based completion.
-  (("C-c C-r" . ivy-resume)
-   ("C-x B" . ivy-switch-buffer-other-window))
   :custom
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
@@ -578,8 +560,8 @@ The first of the two lines below designates the directory where will place all o
 
 #+begin_src emacs-lisp
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
-;;(load-theme 'dtmacs t)
-(load-theme 'timu-caribbean t)
+(load-theme 'dtmacs t)
+;;(load-theme 'timu-caribbean t)
 #+end_src
 
 * WHICH-KEY
@@ -645,15 +627,16 @@ Eshell is an Emacs 'shell' that is written in Elisp.
 
 * TREE SITTER
 ;; tree sitter package
-#+begin_src emacs-lisp
-(use-package tree-sitter)
-#+end_src
+;;#+begin_src emacs-lisp
+;;(use-package tree-sitter)
+;;(use-package tree-sitter-langs)
+;;#+end_src
 
 ;; tree sitter from emacs build
-;;#+begin_src emacs-lisp
-;;(global-font-lock-mode t)
-;;(setq font-lock-maximum-decoration 3)
-;;(setq treesit-extra-load-path '(~/.config/emacs/tree-sitter))
-;;(setq treesit-language-source-alist
-;;   '((c "https://github.com/tree-sitter/tree-sitter-c.git")))
-;;#+end_src
+#+begin_src emacs-lisp
+(global-font-lock-mode t)
+(setq font-lock-maximum-decoration 3)
+(setq treesit-extra-load-path '(~/.config/emacs/tree-sitter))
+(setq treesit-language-source-alist
+   '((c "https://github.com/tree-sitter/tree-sitter-c.git")))
+#+end_src
