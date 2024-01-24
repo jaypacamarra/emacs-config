@@ -22,6 +22,7 @@
   - [[#display-line-numbers-and-truncated-lines][Display Line Numbers and Truncated Lines]]
   - [[#ranger-as-default-file-navigator][Ranger as Default File Navigator]]
   - [[#fuzzy-find-search][Fuzzy Find Search]]
+  - [[#modeline][MODELINE]]
 - [[#language-server-protocol-lsp][Language Server Protocol (LSP)]]
 - [[#magit][MAGIT]]
 - [[#ivy-counsel][IVY (COUNSEL)]]
@@ -425,6 +426,18 @@ Let's make GNU Emacs look a little better.
 ;; add fzf to emacs exec-path
 (add-to-list 'exec-path "/usr/local/bin")
 (use-package fzf)
+#+end_src
+
+** MODELINE
+#+begin_src emacs-lisp
+(use-package smart-mode-line)
+(use-package smart-mode-line-powerline-theme
+  :after smart-mode-line)
+(setq sml/theme 'powerline)
+(add-hook 'emacs-lisp-mode-hook
+  (lambda ()
+    (sml/setup)
+  ))
 #+end_src
 
 * Language Server Protocol (LSP)
