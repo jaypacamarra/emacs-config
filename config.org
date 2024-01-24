@@ -179,6 +179,10 @@
   "e r" '(eval-region :wk "Evaluate elisp in region")) 
 
 (jay/leader-keys
+  "g" '(:ignore t :wk "Git Magity")
+  "g g" '(magit-status :wk "Magit"))
+
+(jay/leader-keys
   "h" '(:ignore t :wk "Help")
   "h f" '(describe-function :wk "Describe function")
   "h v" '(describe-variable :wk "Describe variable")
