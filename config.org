@@ -453,10 +453,14 @@ Let's make GNU Emacs look a little better.
 
 ** MODELINE
 #+begin_src emacs-lisp
-(use-package smart-mode-line)
+(use-package smart-mode-line
+  :config
+    (setq sml/shorten-directory t)
+    (setq sml/name-width 10)
+    (setq sml/mode-width 'full)
+    (setq sml/theme 'powerline))
 (use-package smart-mode-line-powerline-theme
   :after smart-mode-line)
-(setq sml/theme 'powerline)
 (add-hook 'emacs-lisp-mode-hook
   (lambda ()
     (sml/setup)
@@ -513,6 +517,7 @@ Ivy-rich allows us to add descriptions alongside the commands in M-x.
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
   (setq enable-recursive-minibuffers t)
+  (setq swiper-include-line-number-in-search t)
   :config
   (ivy-mode))
 
