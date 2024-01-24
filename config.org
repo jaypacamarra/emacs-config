@@ -153,7 +153,7 @@
 
 ;; set up 'SPC' as the global leader key
 (general-create-definer jay/leader-keys
-  :states '(normal insert visual emacs help info custom)
+  :states '(normal insert visual emacs help info custom messages)
   :keymaps 'override
   :prefix "SPC" ;; set leader
   :global-prefix "M-SPC") ;; access leader in insert mode
@@ -469,6 +469,7 @@ Let's make GNU Emacs look a little better.
   :init
   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   (setq lsp-keymap-prefix "C-c l")
+  (setq lsp-headerline-breadcrumb-enable nil)
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (c-mode . lsp)
          (c-ts-mode . lsp)
