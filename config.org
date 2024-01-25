@@ -322,24 +322,53 @@ one, an error is signaled."
 #+end_src
 
 * COMPANY
-[[https://company-mode.github.io/][Company]] is a text completion framework for Emacs. The name stands for "complete anything".  Completion will start automatically after you type a few letters. Use M-n and M-p to select, <return> to complete or <tab> to complete the common part.
+[[https://company-mode.github.io/][Company]] is a text completion framework for Emacs. The name stands for "complete anything".  Completion will start automatically after you type a few letters. Use M-n and M-p to select, <return> to complete or <tab> to complete the common 
 
 #+begin_src emacs-lisp
-;;(use-package company
-;;  :defer 2
-;;  :diminish
-;;  :custom
-;;  (company-begin-commands '(self-insert-command))
-;;  (company-idle-delay .1)
-;;  (company-minimum-prefix-length 2)
-;;  (company-show-numbers t)
-;;  (company-tooltip-align-annotations 't)
-;;  (global-company-mode t))
-;;
-;;(use-package company-box
-;;  :after company
-;;  :diminish
-;;  :hook (company-mode . company-box-mode))
+(use-package corfu
+  ;; Optional customizations
+  ;; :custom
+  ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  ;; (corfu-auto t)                 ;; Enable auto completion
+  ;; (corfu-separator ?\s)          ;; Orderless field separator
+  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+  ;; Enable Corfu only for certain modes.
+  ;; :hook ((prog-mode . corfu-mode)
+  ;;        (shell-mode . corfu-mode)
+  ;;        (eshell-mode . corfu-mode))
+
+  ;; Recommended: Enable Corfu globally.  This is recommended since Dabbrev can
+  ;; be used globally (M-/).  See also the customization variable
+  ;; `global-corfu-modes' to exclude certain modes.
+  :init
+  (global-corfu-mode))
+
+  (use-package cape)
+
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package company
+  :defer 2
+  :diminish
+  :custom
+  (company-begin-commands '(self-insert-command))
+  (company-idle-delay .1)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t))
+
+(use-package company-box
+  :after company
+  :diminish
+  :hook (company-mode . company-box-mode))
 #+end_src
 
 * DIMINISH
@@ -457,13 +486,13 @@ Let's make GNU Emacs look a little better.
   :config
     (setq sml/shorten-directory t)
     (setq sml/name-width 10)
-    (setq sml/mode-width 'full)
-    (setq sml/theme 'powerline))
+    (setq sml/mode-width 'full))
 (use-package smart-mode-line-powerline-theme
   :after smart-mode-line)
 (add-hook 'emacs-lisp-mode-hook
   (lambda ()
     (sml/setup)
+    (sml/apply-theme 'powerline)
   ))
 #+end_src
 
@@ -696,7 +725,7 @@ Eshell is an Emacs 'shell' that is written in Elisp.
 (setq font-lock-maximum-decoration t)
 (setq treesit-extra-load-path '(~/.config/emacs/tree-sitter))
 (setq treesit-language-source-alist
-   '((c . "https://github.com/tree-sitter/tree-sitter-c.git")
-     (cpp . "https://github.com/tree-sitter/tree-sitter-cpp.git")))
+      '((c . "https://github.com/tree-sitter/tree-sitter-c.git")
+        (cpp . "https://github.com/tree-sitter/tree-sitter-cpp.git")))
 #+end_src
 
