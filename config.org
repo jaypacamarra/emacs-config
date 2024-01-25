@@ -39,9 +39,6 @@
 - [[#theme][THEME]]
 - [[#which-key][WHICH-KEY]]
 - [[#reload-emacs][RELOAD EMACS]]
-- [[#shells-and-terminals][SHELLS AND TERMINALS]]
-  - [[#eshell][Eshell]]
-  - [[#vterm][VTERM]]
 - [[#tabs][TABS]]
 - [[#tree-sitter][TREE SITTER]]
 
@@ -484,16 +481,15 @@ Let's make GNU Emacs look a little better.
 #+begin_src emacs-lisp
 (use-package smart-mode-line
   :config
-    (setq sml/shorten-directory t)
-    (setq sml/name-width 10)
-    (setq sml/mode-width 'full))
+  (setq sml/shorten-directory t)
+  (setq sml/name-width 40)
+  (setq sml/mode-width 50))
 (use-package smart-mode-line-powerline-theme
-  :after smart-mode-line)
+   :after smart-mode-line)
 (add-hook 'emacs-lisp-mode-hook
-  (lambda ()
-    (sml/setup)
-    (sml/apply-theme 'powerline)
-  ))
+   ( lambda()
+   (sml/setup)
+   (sml/apply-theme 'powerline)))
 #+end_src
 
 * Language Server Protocol (LSP)
@@ -674,36 +670,6 @@ This is just an example of how to create a simple function in Emacs.  Use this f
   (interactive)
   (load-file user-init-file)
   (load-file user-init-file))
-#+end_src
-* SHELLS AND TERMINALS
-In my configs, all of my shells (bash, fish, zsh and the ESHELL) require my shell-color-scripts-git package to be installed.  On Arch Linux, you can install it from the AUR.  Otherwise, go to my shell-color-scripts repository on GitLab to get it.
-
-** Eshell
-Eshell is an Emacs 'shell' that is written in Elisp.
-
-#+begin_src emacs-lisp
-    (use-package eshell-syntax-highlighting
-      :after esh-mode
-      :config
-      (eshell-syntax-highlighting-global-mode +1))
-
-    ;; eshell-syntax-highlighting -- adds fish/zsh-like syntax highlighting.
-    ;; eshell-rc-script -- your profile for eshell; like a bashrc for eshell.
-    ;; eshell-aliases-file -- sets an aliases file for the eshell.
-
-    (setq eshell-rc-script (concat user-emacs-directory "eshell/profile")
-          eshell-aliases-file (concat user-emacs-directory "eshell/aliases")
-          eshell-history-size 5000
-          eshell-buffer-maximum-lines 5000
-          eshell-hist-ignoredups t
-          eshell-scroll-to-bottom-on-input t
-          eshell-destroy-buffer-when-process-dies t
-          eshell-visual-commands'("bash" "fish" "htop" "ssh" "top" "zsh"))
-** VTERM
-    (use-package vterm
-        :ensure t
-        :config
-        (setq shell-file-name "/bin/zsh"))
 #+end_src
 
 * TABS
